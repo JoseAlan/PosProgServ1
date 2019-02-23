@@ -11,9 +11,9 @@ class Api::V1::ProductsController < ApplicationController
 
 	#create
 	def create
-		product = Product.new
-		product.name = params[:name]
-		product.quantity = params[:quantity]
+		product = Product.new product_params
+		#product.name = params[:name]
+		#product.quantity = params[:quantity]
 
 		if product.save
 			render json: product, status: :created and return
@@ -28,7 +28,7 @@ class Api::V1::ProductsController < ApplicationController
 
 	#delete
 	def destroy
-		@product = Product.find_by_id(params[:id])
+		#product = Product.find_by_id(params[:id])
 		if @product.nil?
 			render json: {message: "Product not found"}, status: :not_found
 		else	
@@ -38,12 +38,11 @@ class Api::V1::ProductsController < ApplicationController
 
 	def update
 		#product = Product.find_by_id(params[:id])
-		@product.name = params[:name]
-		@product.quantity = params[:quantity]
-
-		if product.save
+		#@product.name = params[:name]
+		#@product.quantity = params[:quantity]
+		if @product.update (product_params)
 			render json: @product, status: :ok and return
-		elsif product.has_nil_fields?
+		elsif @product.has_nil_fields?
 			error_status = :bad_request
 		else	
 			error_status = :unprocessable_entity
@@ -61,6 +60,10 @@ class Api::V1::ProductsController < ApplicationController
 			render json: @product, status: :ok 
 		end
 
+	end
+
+	def product_params
+		params.permit(:name, :quantity)
 	end
 
 	private
