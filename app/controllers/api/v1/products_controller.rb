@@ -4,7 +4,7 @@ class Api::V1::ProductsController < ApplicationController
 	def hello_world
 		render json: {message: 'Hello API'}
 	end
-	
+
 	def index
 		products = Product.all
 		render json: products, status: :ok 
@@ -69,6 +69,6 @@ class Api::V1::ProductsController < ApplicationController
 
 	private
 	def find_product
-		@product = Product.find_by_id(params[:id])
+		@product = Product.where(params[:id])
 	end	
 end
