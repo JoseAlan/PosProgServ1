@@ -1,0 +1,169 @@
+Microsoft Windows [versão 10.0.16299.726]
+(c) 2017 Microsoft Corporation. Todos os direitos reservados.
+
+C:\Users\LAB 3A - Aluno>CD desenvolvimento\PosProgServ1
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rails db:seed
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rails g model Price value:float currency:string
+      invoke  active_record
+      create    db/migrate/20190224113621_create_prices.rb
+      create    app/models/price.rb
+      invoke    test_unit
+      create      test/models/price_test.rb
+      create      test/fixtures/prices.yml
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rake db:migrate
+== 20190224113621 CreatePrices: migrating =====================================
+-- create_table(:prices)
+   -> 0.1280s
+== 20190224113621 CreatePrices: migrated (0.1287s) ============================
+
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rails g migration AddPriceToProduct
+      invoke  active_record
+      create    db/migrate/20190224114733_add_price_to_product.rb
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rake db:migrate
+== 20190224114733 AddPriceToProduct: migrating ================================
+-- add_reference(:prices, :product, {:index=>true})
+   -> 0.5081s
+== 20190224114733 AddPriceToProduct: migrated (0.5087s) =======================
+
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rails c
+Loading development environment (Rails 5.2.2)
+irb(main):001:0> p = Product.new
+=> #<Product id: nil, name: nil, quantity: nil, created_at: nil, updated_at: nil>
+irb(main):002:0> p.name = "Novo nome"
+=> "Novo nome"
+irb(main):003:0> p.quantity = 20
+=> 20
+irb(main):004:0> p.save
+   (0.2ms)  BEGIN
+  Product Create (0.7ms)  INSERT INTO "products" ("name", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["name", "Novo nome"], ["quantity", 20], ["created_at", "2019-02-24 11:54:45.851743"], ["updated_at", "2019-02-24 11:54:45.851743"]]
+   (9.8ms)  COMMIT
+=> true
+irb(main):005:0> Product.last
+  Product Load (0.3ms)  SELECT  "products".* FROM "products" ORDER BY "products"."id" DESC LIMIT $1  [["LIMIT", 1]]
+=> #<Product id: 11, name: "Novo nome", quantity: 20, created_at: "2019-02-24 11:54:45", updated_at: "2019-02-24 11:54:45">
+irb(main):006:0> price = Price.new
+=> #<Price id: nil, value: nil, currency: nil, created_at: nil, updated_at: nil, product_id: nil>
+irb(main):007:0> price.value=100
+=> 100
+irb(main):008:0> price.currency = "br"
+=> "br"
+irb(main):009:0> price.save
+   (0.2ms)  BEGIN
+  Price Create (1.3ms)  INSERT INTO "prices" ("value", "currency", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["value", 100.0], ["currency", "br"], ["created_at", "2019-02-24 11:56:38.211449"], ["updated_at", "2019-02-24 11:56:38.211449"]]
+   (0.4ms)  COMMIT
+=> true
+irb(main):010:0> p.price = price
+  Price Load (0.3ms)  SELECT  "prices".* FROM "prices" WHERE "prices"."product_id" = $1 LIMIT $2  [["product_id", 11], ["LIMIT", 1]]
+   (0.1ms)  BEGIN
+  Price Update (0.4ms)  UPDATE "prices" SET "updated_at" = $1, "product_id" = $2 WHERE "prices"."id" = $3  [["updated_at", "2019-02-24 11:57:15.401316"], ["product_id", 11], ["id", 1]]
+   (0.5ms)  COMMIT
+=> #<Price id: 1, value: 100.0, currency: "br", created_at: "2019-02-24 11:56:38", updated_at: "2019-02-24 11:57:15", product_id: 11>
+irb(main):011:0> Product.last.price
+  Product Load (0.3ms)  SELECT  "products".* FROM "products" ORDER BY "products"."id" DESC LIMIT $1  [["LIMIT", 1]]
+  Price Load (0.3ms)  SELECT  "prices".* FROM "prices" WHERE "prices"."product_id" = $1 LIMIT $2  [["product_id", 11], ["LIMIT", 1]]
+=> #<Price id: 1, value: 100.0, currency: "br", created_at: "2019-02-24 11:56:38", updated_at: "2019-02-24 11:57:15", product_id: 11>
+irb(main):012:0> exit
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rails g model Piece number:integer name:string
+      invoke  active_record
+      create    db/migrate/20190224115900_create_pieces.rb
+      create    app/models/piece.rb
+      invoke    test_unit
+      create      test/models/piece_test.rb
+      create      test/fixtures/pieces.yml
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rake db: migate
+rake aborted!
+Don't know how to build task 'db:' (See the list of available tasks with `rake --tasks`)
+
+(See full trace by running task with --trace)
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rake db:migrate
+== 20190224115900 CreatePieces: migrating =====================================
+-- create_table(:pieces)
+   -> 0.0939s
+== 20190224115900 CreatePieces: migrated (0.0950s) ============================
+
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rails g migration AddPiecesToProduct
+      invoke  active_record
+      create    db/migrate/20190224120122_add_pieces_to_product.rb
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rake db:migrate
+rake aborted!
+SyntaxError: C:/Users/LAB 3A - Aluno/desenvolvimento/PosProgServ1/db/migrate/20190224120122_add_pieces_to_product.rb:3: syntax error, unexpected ':', expecting end
+        add_reference: pieces, :product, index: true
+                     ^
+C:/Users/LAB 3A - Aluno/desenvolvimento/PosProgServ1/db/migrate/20190224120122_add_pieces_to_product.rb:3: syntax error, unexpected ',', expecting '.' or &. or :: or '['
+...dd_reference: pieces, :product, index: true
+...                              ^
+
+Tasks: TOP => db:migrate
+(See full trace by running task with --trace)
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rake db:migrate
+rake aborted!
+SyntaxError: C:/Users/LAB 3A - Aluno/desenvolvimento/PosProgServ1/db/migrate/20190224120122_add_pieces_to_product.rb:3: syntax error, unexpected ':', expecting end
+        add_reference: pieces, :product, index: true
+                     ^
+C:/Users/LAB 3A - Aluno/desenvolvimento/PosProgServ1/db/migrate/20190224120122_add_pieces_to_product.rb:3: syntax error, unexpected ',', expecting '.' or &. or :: or '['
+...dd_reference: pieces, :product, index: true
+...                              ^
+
+Tasks: TOP => db:migrate
+(See full trace by running task with --trace)
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rake db:migrate
+== 20190224120122 AddPiecesToProduct: migrating ===============================
+-- add_reference(:pieces, :product, {:index=>true})
+   -> 0.0443s
+== 20190224120122 AddPiecesToProduct: migrated (0.0453s) ======================
+
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rake db:migrate
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>rails c
+Loading development environment (Rails 5.2.2)
+irb(main):001:0> p = Product.new
+=> #<Product id: nil, name: nil, quantity: nil, created_at: nil, updated_at: nil>
+irb(main):002:0> p.name = "Zéca pagodinho"
+=> "Z\x82ca pagodinho"
+irb(main):003:0> p.name = "pagodinho"
+=> "pagodinho"
+irb(main):004:0> p.quantity = 18
+=> 18
+irb(main):005:0> p.save
+   (0.2ms)  BEGIN
+  Product Create (0.9ms)  INSERT INTO "products" ("name", "quantity", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["name", "pagodinho"], ["quantity", 18], ["created_at", "2019-02-24 12:22:40.189835"], ["updated_at", "2019-02-24 12:22:40.189835"]]
+   (98.9ms)  COMMIT
+=> true
+irb(main):006:0> preda = Piece.new
+=> #<Piece id: nil, number: nil, name: nil, created_at: nil, updated_at: nil, product_id: nil>
+irb(main):007:0> preda.number = 25
+=> 25
+irb(main):008:0> preda.name ="havaina de pau"
+=> "havaina de pau"
+irb(main):009:0> preda.save
+   (0.2ms)  BEGIN
+  Piece Create (1.3ms)  INSERT INTO "pieces" ("number", "name", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["number", 25], ["name", "havaina de pau"], ["created_at", "2019-02-24 12:26:14.581647"], ["updated_at", "2019-02-24 12:26:14.581647"]]
+   (0.7ms)  COMMIT
+=> true
+irb(main):010:0> p.pieces.push preda
+   (0.3ms)  BEGIN
+  Piece Update (0.5ms)  UPDATE "pieces" SET "updated_at" = $1, "product_id" = $2 WHERE "pieces"."id" = $3  [["updated_at", "2019-02-24 12:33:32.788661"], ["product_id", 12], ["id", 1]]
+   (0.5ms)  COMMIT
+  Piece Load (0.2ms)  SELECT  "pieces".* FROM "pieces" WHERE "pieces"."product_id" = $1 LIMIT $2  [["product_id", 12], ["LIMIT", 11]]
+=> #<ActiveRecord::Associations::CollectionProxy [#<Piece id: 1, number: 25, name: "havaina de pau", created_at: "2019-02-24 12:26:14", updated_at: "2019-02-24 12:33:32", product_id: 12>]>
+irb(main):011:0> Product.last.pieces
+  Product Load (0.4ms)  SELECT  "products".* FROM "products" ORDER BY "products"."id" DESC LIMIT $1  [["LIMIT", 1]]
+  Piece Load (0.2ms)  SELECT  "pieces".* FROM "pieces" WHERE "pieces"."product_id" = $1 LIMIT $2  [["product_id", 12], ["LIMIT", 11]]
+=> #<ActiveRecord::Associations::CollectionProxy [#<Piece id: 1, number: 25, name: "havaina de pau", created_at: "2019-02-24 12:26:14", updated_at: "2019-02-24 12:33:32", product_id: 12>]>
+irb(main):012:0> exit
+
+C:\Users\LAB 3A - Aluno\desenvolvimento\PosProgServ1>

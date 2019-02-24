@@ -1,10 +1,11 @@
 class Api::V1::ProductsController < ApplicationController
-	before_action :find_product, only: [:find, :update, :destroy]
+	before_action :find_product, only: [:show, :update, :destroy]
 
 	def hello_world
 		render json: {message: 'Hello API'}
 	end
-	def list
+	
+	def index
 		products = Product.all
 		render json: products, status: :ok 
 	end
@@ -52,7 +53,7 @@ class Api::V1::ProductsController < ApplicationController
 
 	end
 
-	def find
+	def show
 		
 		if @product.nil?
 			render json: {message: "Product not found"}, status: :not_found
